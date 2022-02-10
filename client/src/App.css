@@ -78,6 +78,32 @@ body {
   border-bottom-right-radius: 10px;
 }
 
+/* Like an Unlike */
+
+.footer .username {
+  flex: 50%;
+}
+
+.footer .likesButton {
+  flex: 50%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.likesButton, label {
+  margin-right: 20px;
+  margin-left: 10px;
+}
+
+.unlikeButton {
+  color: rgba(1, 1, 1, 1);
+}
+
+.likeButton {
+  color: rgba(1, 1, 1, 0.5);
+}
+
 /* INDIVIDUAL POST */
 
 .postPage {

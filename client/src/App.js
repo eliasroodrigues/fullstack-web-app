@@ -13,6 +13,7 @@ import CreatePost from './pages/CreatePost';
 import Post from './pages/Post';
 import Login from './pages/Login';
 import Registration from './pages/Registration';
+import PageNotFound from './pages/PageNotFound';
 import { AuthContext } from './helpers/AuthContext';
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
             <Route path="/post/:id" exact element={<Post />} />
             <Route path="/login" exact element={<Login />} />
             <Route path="/registration" exact element={<Registration />} />
+            <Route path="*" exact element={<PageNotFound />} />
           </Routes>
         </Router>
       </AuthContext.Provider>

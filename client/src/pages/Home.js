@@ -2,15 +2,22 @@ import React from 'react';
 import Axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
+
   let navigate = useNavigate();
 
   useEffect(() => {
-    Axios.get("http://localhost:3001/posts")
-      .then((response) => {
-        setListOfPosts(response.data);
+    Axios.get("http://localhost:3001/posts",
+      { headers: { accessToken: localStorage.getItem("accessToken") }}
+    ).then((response) => {
+      setListOfPosts(response.data.listOfPosts);
+      setLikedPosts(response.data.likedPosts.map((like) => {
+        return like.PostId;
+      }));
     });
   }, []);
 
@@ -20,7 +27,7 @@ function Home() {
       { headers: { accessToken: localStorage.getItem("accessToken") }}
     ).then((response) => {
       setListOfPosts(listOfPosts.map((post) => {
-        if (post.id == postId) {
+        if (post.id === postId) {
           if (response.data.liked) {
             return {...post, Likes: [...post.Likes, 0]};
           } else {
@@ -31,7 +38,15 @@ function Home() {
         } else {
           return post;
         }
-      }))
+      }));
+
+      if (likedPosts.includes(postId)) {
+        setLikedPosts(likedPosts.filter((id) => {
+          return id !== postId;
+        }))
+      } else {
+        setLikedPosts([...likedPosts, postId]);
+      }
     });
   };
   
@@ -47,8 +62,14 @@ function Home() {
               {value.postText}
             </div>
             <div className="footer">
-              {value.username}
-              <button onClick={() => {likeAPost(value.id);}}>Like</button>
+              <div className="username">{value.username}</div>
+
+              <div className="likesButton">
+                <FavoriteIcon onClick={() => { likeAPost(value.id) }}
+                  className={likedPosts.includes(value.id) ? "unlikeButton" : "likeButton"}
+                />
+              </div>
+
               <label>{value.Likes.length}</label>
             </div>
           </div>
